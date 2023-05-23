@@ -1,0 +1,103 @@
+
+server:
+  port: 8081
+  
+  #---------EUREKA-DISCOVERY-SERVER CONFIG----------#
+eureka:
+  instance:
+    hostname: localhost
+    
+    prefer-ip-address: true
+  
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    
+  
+  
+            #---------------MYSQL DATABASE CONNECTIVITY CONFIG--------------#
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/microService-user?createDatabaseIfNotExist=true
+    username: root  
+    password: admin
+      
+#spring:            #--------------HIBERNATE CONFIG----------------#
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    
+  application:
+    name: user-service
+   
+  #1. WAY OF GET PROP.   #-----------CLOUD CONFIG SERVER CONFIG TO GET COMMON PROP. FROM CLOUD-CONFIG-SERVER MICROSERVICE-----------#
+#  config:
+#    import:
+#    - configserver:http://localhost:8085
+    
+    #....OR....#
+  #2. WAY OF GET PROP.
+#spring:
+#  cloud:
+#    config:
+#      uri:
+#        - http://localhost:9003
+    
+    #-----------TO DISABLE FETCHING COMMON PROP. FROM CONFIG_SERVER Repo in GIT----------#
+#  cloud:
+#    config:
+#      enabled: false
+
+#-------ACTUATOR CONFIG TO TRACK HEALTH OF CIRCUIT BREAKER--------#  
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  
+    ratelimiters:
+      enabled: false #---as of now no ratelimiter is used------
+      
+  endpoints:
+    web:
+      exposure:
+        include: health
+        
+  endpoint: 
+    health:
+      show-details: always
+      
+      #-------RESILIENCE4J FAULT TOLERENCE--------#
+resilience4j:
+#------CIRCUIT BREAKER CONFIG-------#
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:  #---THIS IS THE NAME() OF CIRCUIT-BREAKER USED IN CONTROLLER
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        
+ #-------RETRY CONFIG-------#        
+  retry:
+    instances:
+      ratingHotelService:
+         max-attempts: 3
+         wait-duration: 5s
+    
+ #--------RATE LIMITER CONFIG------#        
+  ratelimiter:
+    instances:
+      userRateLimiter:
+        limit-refresh-period: 4s
+        limit-for-period: 2
+        timeout-duration: 0s
+         
+    
+ 

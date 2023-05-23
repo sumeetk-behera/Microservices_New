@@ -1,0 +1,25 @@
+
+#-----------------MongoDb Config----------------#
+#spring:
+#  data:
+#    mongodb:
+#      uri: mongodb://localhost:27017
+spring:      
+  application:
+    name: rating-service
+    
+#-----------------Eureka Client Config----------# 
+eureka:
+  instance:
+    hostname: localhost
+    
+    prefer-ip-address: true
+  
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+
+
+#  config:
+#    import:
+#    - configserver:http://localhost:8085

@@ -1,0 +1,8 @@
+
+`
+java:S11723"(Remove this unused method parameter "e".(ŸËşÿÿÿÿ8Ş°ÿ¦ì0HÉRMAJORZ
+CODE_SMELL
+y
+java:S4684"@Replace this persistent entity with a simple POJO or DTO object.(Ó¥ù8Æ˜èÀç0HËRCRITICALZVULNERABILITY
+k	java:S106+"9Replace this use of System.out or System.err by a logger.(ˆ©²ı8„Œ­®ì0HÌRMAJORZ
+CODE_SMELL
